@@ -7,13 +7,7 @@ import { useEffect, useState } from 'react';
 
 const Navbar = () => {
     const [username, setUsername] = useState("");
-    const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
-    const REDIRECT_URI = "http://localhost:5173"
-    const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
-    const RESPONSE_TYPE = "token"
-    const SCOPES = [
-        "playlist-modify-private",
-    ]
+    const [token, setToken] = useState("");
 
     const logout = () => {
         setToken("");
@@ -21,29 +15,27 @@ const Navbar = () => {
     };
 
     const login = () => { 
-        fetch('http://localhost:8080/username', {
-            method: 'GET'
-        })
-        .then(response => response.json())
-        .then(data => setUsername(data.username));
-    window.location.href = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPES.join("%20")}&response_type=${RESPONSE_TYPE}&show_dialog=true`
+        fetch('http://localhost:8080/login')
+            .then(response => response.json())
+            .then(data => {
+                window.location.href = data.url;  // Redirect the user
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     useEffect(() => {
-        const hash = window.location.hash
-        let token = window.localStorage.getItem("token")
+        // const hash = window.location.hash
+        // let token = window.localStorage.getItem("token")
 
-        if (!token && hash) {
-            token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token"))!.split("=")[1]
+        // if (!token && hash) {
+        //     token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token"))!.split("=")[1]
 
-            window.location.hash = ""
-            window.localStorage.setItem("token", token)
-        }
+        //     window.location.hash = ""
+        //     window.localStorage.setItem("token", token)
+        // }
 
-        setToken(token!)
+        // setToken(token!)
     }, [])
-    
-    const [token, setToken] = useState("");
 
     return (
         <Box sx={{ flexGrow: 1 }}>

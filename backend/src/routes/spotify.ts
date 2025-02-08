@@ -32,7 +32,7 @@ module.exports = function (app) {
     console.log("username!!");
     console.log(display_name);
 
-    createPlaylist(accessToken);
+    // createPlaylist(accessToken);
   }
 
   async function createPlaylist(accessToken) {

@@ -1,4 +1,5 @@
 import './App.css'
+import Gemini from './components/Gemini';
 
 function App() {
   const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
@@ -19,7 +20,11 @@ function App() {
           rel="noopener noreferrer"
         >
           Login with Spotify
-        </a>        
+        </a>
+        <br></br>
+        <br></br>
+        <br></br>
+        <Gemini />
       </header>
     </div>
   )

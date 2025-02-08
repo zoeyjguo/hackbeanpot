@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import './App.css'
-import { APIProvider, Map } from '@vis.gl/react-google-maps';
+import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
+
+type Poi = { key: string, location: google.maps.LatLngLiteral }
+const start: Poi = {key: "", location: {lat: 40.45169670885332, lng: -96.67690877146124}};
 
 function App() {
   const [count, setCount] = useState(0)
@@ -14,7 +17,9 @@ function App() {
           defaultZoom={5}
           gestureHandling={'greedy'}
           disableDefaultUI={true}
-        />
+        >
+          <Marker key={start.key} position={start.location} />
+        </Map>
       </APIProvider>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>

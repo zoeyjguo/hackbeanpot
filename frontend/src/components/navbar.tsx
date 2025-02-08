@@ -45,12 +45,12 @@ const Navbar = () => {
             <Toolbar>
             {token && (
                 <Box>
-                <Typography color='#000000' fontWeight={'bold'} fontSize={16}>
+                <Typography color='#000000' fontWeight={'bold'} fontSize={16} fontFamily={"Inter, system-ui, Avenir, Helvetica, Arial, sans-serif"}>
                     Hi {CLIENT_ID}!
                 </Typography>
                 </Box>
             )}
-            <Box sx={{ marginLeft: 'auto' }}> {/* Pushes buttons to the right */}
+            <Box sx={{ marginLeft: 'auto' }}>
                 {!token ? (
                 <a className="App-link" rel="noopener noreferrer">
                     <button onClick={login}>Login with Spotify</button>

@@ -64,13 +64,15 @@ module.exports = function(app){
     app.get('/login', function(req, res) {
         const scope = 'user-read-private user-read-email playlist-modify-private';
 
-        res.redirect('https://accounts.spotify.com/authorize?' +
+        const url = 'https://accounts.spotify.com/authorize?' +
             stringify({
                 response_type: 'code',
                 client_id: client_id,
                 scope: scope,
                 redirect_uri: redirect_uri
-            }));
+            });
+
+        res.json({ url });  // Send back the URL instead of redirecting
     });
 
     app.get('/callback', function(req, res) {
@@ -104,7 +106,7 @@ module.exports = function(app){
             },
             headers: {
                 'content-type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
+                'Authorization': 'Basic ' + (Buffer.from(client_id + ':' + client_secret).toString('base64'))
             },
             json: true
         };
@@ -136,7 +138,7 @@ module.exports = function(app){
         });
 
         console.log(res);
-        res.data("hiiii")
+        // res.data("hiiii")
 
         res.redirect('http://localhost:5173');  // Redirect to React app
     });

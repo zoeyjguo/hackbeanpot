@@ -15,14 +15,12 @@ function App() {
     const makeAPICall = () => {
         console.log("made api call?")
 
-        fetch('http://localhost:8080/login', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then((res) => res.json())
-        .then(data => setData(data))
+        fetch('http://localhost:8080/login')
+          .then(response => response.json())
+          .then(data => {
+              window.location.href = data.url;  // Redirect the user
+          })
+          .catch(error => console.error('Error:', error));
         // api call and response
         // store response in a state variable
         console.log("end api call")

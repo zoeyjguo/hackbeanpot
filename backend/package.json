@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "node ./dist/index.js",
+    "tsc": "tsc",
+    "postinstall": "npm run tsc",
+    "dev": "npm run tsc && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -13,5 +17,14 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.1",
+    "@typescript-eslint/parser": "^8.23.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.7.3"
   }
 }

@@ -1,16 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const {stringify} = require("querystring");
-const app = express();
 require('dotenv').config();
-
-require('./routes/spotify')(app);
-
-app.use(express.json());
-
-app.listen(8080, () => {
-    console.log('server listening on port 8080')
-})
+const app = express();
 
 // cross-origin resource sharing policy
 app.use(cors({
@@ -18,6 +9,14 @@ app.use(cors({
     methods: 'GET,POST,PUT,DELETE',   // Allowed HTTP methods
     credentials: true                 // If you're using cookies or auth headers
 }));
+
+app.use(express.json());
+
+require('./routes/spotify')(app);
+
+app.listen(8080, () => {
+    console.log('server listening on port 8080')
+})
 
 app.get('/', (req, res) => {
     res.send('Hello from our server!')

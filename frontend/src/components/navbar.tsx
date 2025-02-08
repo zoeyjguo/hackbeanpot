@@ -10,15 +10,20 @@ const Navbar = () => {
     const [token, setToken] = useState("");
 
     const logout = () => {
-        setToken("");
-        window.localStorage.removeItem("token"); 
+        fetch('http://localhost:8080/logout')
+            .then(response => response.json())
+            .then(data => {
+                setUsername("");
+                window.location.href = data.url;
+            })
+            .catch(error => console.error('Error:', error));
     };
 
     const login = () => { 
         fetch('http://localhost:8080/login')
             .then(response => response.json())
             .then(data => {
-                window.location.href = data.url;  // Redirect the user
+                window.location.href = data.url;
             })
             .catch(error => console.error('Error:', error));
     }
@@ -61,7 +66,7 @@ const Navbar = () => {
                 </Box>
             )}
             <Box sx={{ marginLeft: 'auto' }}>
-                {!token ? (
+                {!username ? (
                 <a className="App-link" rel="noopener noreferrer">
                     <button onClick={login}>Login with Spotify</button>
                 </a>

@@ -100,7 +100,20 @@ module.exports = function (app) {
         show_dialog: true,
       });
 
-    res.json({ url }); // Send back the URL instead of redirecting
+    res.json({ url });
+  });
+
+  app.get("/logout", function (req, res) {
+    access_token = null;
+    refresh_token = null;
+    scope = null;
+    expires_in = null;
+    display_name = null;
+    playlist_id = null;
+    playlist_href = null;
+    user_id = null;
+
+    res.json({ url: "http://localhost:5173" });
   });
 
   app.get("/callback", function (req, res) {

@@ -6,14 +6,17 @@ import Navbar from './components/navbar'
 function App() {
     const [playlistName, setPlaylistName] = useState("");
     const [numSongs, setNumSongs] = useState(1);
-
+    
     const createPlaylist = () => {
       console.log("Creating playlist");
       console.log(playlistName);
       console.log(numSongs);
     }
 
-    const checkValidity = numSongs > 3 || numSongs < 1 || playlistName == "";
+    const checkValidity = () => {
+      return numSongs > 3 || numSongs < 1 || playlistName.trim() === "";
+    }
+
     return (
       <>
         <Navbar />
@@ -35,7 +38,7 @@ function App() {
                 Number of songs per attraction: <input type="number" id={numSongs.toString()} min="1" max="3" 
                   onChange={event => setNumSongs(Number(event.target.value))} defaultValue="1"/>
               </div>
-            <button onClick={createPlaylist} disabled = {checkValidity}>Create Playlist</button>
+            <button onClick={createPlaylist} disabled={checkValidity()}>Create Playlist</button>
           </header>
         </div>
       </>

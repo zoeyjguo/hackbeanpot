@@ -4,16 +4,9 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import { useEffect, useState } from 'react';
 
+
 const Navbar = () => {
-    const logout = () => {
-        setToken("");
-        window.localStorage.removeItem("token"); 
-    };
-
-    const login = () => {
-    window.location.href = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPES.join("%20")}&response_type=${RESPONSE_TYPE}&show_dialog=true`
-    }
-
+    const [username, setUsername] = useState("");
     const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
     const REDIRECT_URI = "http://localhost:5173"
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
@@ -21,6 +14,20 @@ const Navbar = () => {
     const SCOPES = [
         "playlist-modify-private",
     ]
+
+    const logout = () => {
+        setToken("");
+        window.localStorage.removeItem("token"); 
+    };
+
+    const login = () => { 
+        fetch('http://localhost:8080/username', {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => setUsername(data.username));
+    window.location.href = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPES.join("%20")}&response_type=${RESPONSE_TYPE}&show_dialog=true`
+    }
 
     useEffect(() => {
         const hash = window.location.hash
@@ -34,7 +41,6 @@ const Navbar = () => {
         }
 
         setToken(token!)
-
     }, [])
     
     const [token, setToken] = useState("");
@@ -46,7 +52,7 @@ const Navbar = () => {
             {token && (
                 <Box>
                 <Typography color='#000000' fontWeight={'bold'} fontSize={16} fontFamily={"Inter, system-ui, Avenir, Helvetica, Arial, sans-serif"}>
-                    Hi {CLIENT_ID}!
+                    Hi {username}!
                 </Typography>
                 </Box>
             )}

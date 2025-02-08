@@ -2,7 +2,8 @@
 
 ## Run the frontend:
 
-idk
+`cd frontend`
+`npm start`
 
 ## Run the backend:
 

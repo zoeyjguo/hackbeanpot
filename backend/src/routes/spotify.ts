@@ -14,10 +14,13 @@ module.exports = function(app){
     let scope;
     let expires_in;
     let display_name;
+    let playlist_id;
+    let playlist_href;
+
 
     let user_id;
 
-    async function getProfile(accessToken) {
+    async function getProfile(accessToken) : Promise<void> {
         const response = await fetch('https://api.spotify.com/v1/me', {
             headers: {
                 Authorization: 'Bearer ' + accessToken
@@ -25,6 +28,7 @@ module.exports = function(app){
         });
 
         const data = await response.json();
+        console.log(response)
         console.log("GOT PROFILE")
         console.log(data.id)
 
@@ -32,11 +36,9 @@ module.exports = function(app){
         display_name = data.display_name;
         console.log("username!!")
         console.log(display_name);
-
-        createPlaylist(accessToken);
     }
 
-    async function createPlaylist(accessToken) {
+    async function createPlaylist(accessToken) : Promise<number> {
         const response = await fetch('https://api.spotify.com/v1/users/' + user_id + '/playlists', {
             method: 'POST',
             headers: {
@@ -50,14 +52,31 @@ module.exports = function(app){
             })
         });
 
+        if (response.status != 201) {
+            console.log(response.status)
+            return -1;
+        }
+
+        console.log("Creating playlist")
         const data = await response.json();
-        console.log("shit");
-        console.log(data);
+        playlist_href = data.external_urls.spotify;
+        playlist_id = data.id;
+        console.log("playlistID!!!!")
+        console.log(playlist_id)
+
+        return 0;
     }
 
 
     app.post('/createPlaylist', function(req, res) {
-        res.status(404);
+        createPlaylist(access_token)
+            .then(value => {
+                if (value < 0) {
+                    res.status(400).send();
+                } else {
+                    res.status(200).send();
+                }
+            })
     });
 
     app.get('/username', function(req, res) {
@@ -87,7 +106,7 @@ module.exports = function(app){
         console.log("callback!")
 
         const code = req.query.code || null;
-        const state = req.query.state || null;
+        // const state = req.query.state || null;
 
         if (!code) {
             res.status(400);
@@ -146,7 +165,6 @@ module.exports = function(app){
         });
 
         console.log(res);
-        // res.data("hiiii")
 
         res.redirect('http://localhost:5173');  // Redirect to React app
     });

@@ -41,6 +41,25 @@ function App() {
         console.log("end api call")
     }
 
+    const createPlaylist = () => {
+        fetch('http://localhost:8080/createPlaylist', {
+            method: 'POST'
+        })
+            .then((res) => {
+                if (res.ok) {
+                    console.log("Created playlist")
+                    console.log(res.status)
+                } else {
+                    console.log("Failure to create playlist")
+                    console.log(res.status)
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        // api call and response
+        // store response in a state variable
+        console.log("end create playlist")
+    }
+
     // useEffect(()=>{
     //     makeAPICall();
     // }, [])
@@ -54,11 +73,16 @@ function App() {
         getDisplayname();
     }
 
+    const handleCreatePlaylist = () => {
+        createPlaylist();
+    }
+
     return (
     <div className="App">
       <header className="App-header">
-        <button type={"button"} onClick={handleClickEvent}>Click me!</button>
-        <button type={"button"} onClick={handleGetUsername}>Click me! {username}</button>
+        <button type={"button"} onClick={handleClickEvent}>Login!</button>
+          <button type={"button"} onClick={handleCreatePlaylist}>Create playlist!</button>
+          <button type={"button"} onClick={handleGetUsername}>Show username: {username}</button>
 
 
         {/*<a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login to Spotify</a>*/}

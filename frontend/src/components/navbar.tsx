@@ -35,13 +35,25 @@ const Navbar = () => {
         // }
 
         // setToken(token!)
+        fetch('http://localhost:8080/username', {
+            method: 'GET'
+        })
+            .then((res) => res.json())
+            .then(data => {
+                setUsername(data.username);
+                console.log('Username:', data.username);
+            })
+            .catch(error => console.error('Error:', error));
+        // api call and response
+        // store response in a state variable
+        console.log("end api call")
     }, [])
 
     return (
         <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static" style={{ background: colors.green[500]}}>
             <Toolbar>
-            {token && (
+            {username && (
                 <Box>
                 <Typography color='#000000' fontWeight={'bold'} fontSize={16} fontFamily={"Inter, system-ui, Avenir, Helvetica, Arial, sans-serif"}>
                     Hi {username}!

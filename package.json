@@ -1,5 +1,11 @@
 {
+  "scripts": {
+    "server": "npm run dev --prefix backend",
+    "client": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
   "dependencies": {
+    "concurrently": "^9.1.2",
     "react-scripts": "^5.0.1"
   }
 }

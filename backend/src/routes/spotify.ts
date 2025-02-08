@@ -13,6 +13,7 @@ module.exports = function(app){
     let refresh_token;
     let scope;
     let expires_in;
+    let display_name;
 
     let user_id;
 
@@ -28,6 +29,9 @@ module.exports = function(app){
         console.log(data.id)
 
         user_id = data.id;
+        display_name = data.display_name;
+        console.log("username!!")
+        console.log(display_name);
 
         createPlaylist(accessToken);
     }
@@ -57,7 +61,11 @@ module.exports = function(app){
     });
 
     app.get('/username', function(req, res) {
-        res.status(404);
+        if (display_name) {
+            res.status(200).send({ username: display_name })
+        } else {
+            res.status(404);
+        }
     });
 
 

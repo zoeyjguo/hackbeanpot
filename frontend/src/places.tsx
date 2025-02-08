@@ -7,12 +7,13 @@ import usePlacesAutocomplete, {
   } from "use-places-autocomplete";
 import Autocomplete from '@mui/material/Autocomplete';
 import { TextField } from '@mui/material';
+import { useLoadScript } from '@react-google-maps/api';
 
 export default function Places() {
-    // const { isLoaded } = useLoadScript({
-    //     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
-    //     libraries: ["places"]
-    // })
+    useLoadScript({
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
+        libraries: ["places"]
+    })
 
     // if (isLoaded) {
     //     return <div>Loading...</div>;
@@ -43,26 +44,9 @@ function MyMap() {
     );
 }
 
-type ComboBoxProps = {
-    value: string;
-    setValue: (value: string) => void;
-    onSelect: (address: string) => Promise<void>;
-    ready: boolean;
-  };
-  
 
-function ComboBox({... ComboBoxProps}) {
-    return (
-      <Autocomplete
-        disablePortal
-        options = {["None selected"]}
-        sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Movie" />}
-      />
-    );
-  }
 
-const PlacesAutocomplete = ({ setSelected } : { setSelected: React.Dispatch<React.SetStateAction<{ lat: number; lng: number } | null>> }) => {
+  const PlacesAutocomplete = ({ setSelected }: {setSelected: React.Dispatch<React.SetStateAction<{ lat: number; lng: number } | null>>}) => {
     const {
       ready,
       value,
@@ -71,7 +55,7 @@ const PlacesAutocomplete = ({ setSelected } : { setSelected: React.Dispatch<Reac
       clearSuggestions,
     } = usePlacesAutocomplete();
   
-    const handleSelect = async (address: string) => {
+    const handleSelect = async (address:string) => {
       setValue(address, false);
       clearSuggestions();
   
@@ -79,15 +63,33 @@ const PlacesAutocomplete = ({ setSelected } : { setSelected: React.Dispatch<Reac
       const { lat, lng } = await getLatLng(results[0]);
       setSelected({ lat, lng });
     };
-    
+  
     return (
-        <ComboBox onSelect={handleSelect}>
-          <input
-            value={value}
-            onChange={(e: React.ChangeEvent<HTMLInputElement >) => setValue(e.target.value)}
-            disabled={!ready}
-            placeholder="Search an address"
-          />
-        </ComboBox>
+      <div>
+        {/* Basic input field */}
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          disabled={!ready}
+          className="input"
+          placeholder="Search an address"
+        />
+  
+        {/* Suggestions List */}
+        {status === "OK" && (
+          <ul className="suggestions-list">
+            {data.map(({ place_id, description }) => (
+              <li
+                key={place_id}
+                onClick={() => handleSelect(description)}
+                className="suggestion-item"
+              >
+                {description}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     );
-};
+  };

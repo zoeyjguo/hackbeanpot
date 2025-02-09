@@ -23,61 +23,60 @@ module.exports = function (app) {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
-
-        });
-
-        const data = await response.json();
-        console.log(response)
-        console.log("GOT PROFILE")
-        console.log(data.id)
-
-        user_id = data.id;
-        display_name = data.display_name;
-        console.log("username!!")
-        console.log(display_name);
-    }
-
-    async function createPlaylist(accessToken) : Promise<number> {
-        const response = await fetch('https://api.spotify.com/v1/users/' + user_id + '/playlists', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + accessToken,
-                'Content-Type': 'application/json'  // Required for JSON data
-            },
-            body: JSON.stringify({
-                name: "HACKBEANPOT PLAYLIST",
-                description: "asdfghgfdafsvfdv",
-                public: false  // Private playlist
-            })
-        });
-
-        if (response.status != 201) {
-            console.log(response.status)
-            return -1;
-        }
-
-        console.log("Creating playlist")
-        const data = await response.json();
-        playlist_href = data.external_urls.spotify;
-        playlist_id = data.id;
-        console.log("playlistID!!!!")
-        console.log(playlist_id)
-
-        return 0;
-    }
-
-
-    app.post('/createPlaylist', function(req, res) {
-        createPlaylist(access_token)
-            .then(value => {
-                if (value < 0) {
-                    res.status(400).send();
-                } else {
-                    res.status(200).send();
-                }
-            })
     });
 
+    const data = await response.json();
+    console.log(response);
+    console.log("GOT PROFILE");
+    console.log(data.id);
+
+    user_id = data.id;
+    display_name = data.display_name;
+    console.log("username!!");
+    console.log(display_name);
+  }
+
+  async function createPlaylist(accessToken): Promise<number> {
+    const response = await fetch(
+      "https://api.spotify.com/v1/users/" + user_id + "/playlists",
+      {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "Content-Type": "application/json", // Required for JSON data
+        },
+        body: JSON.stringify({
+          name: "HACKBEANPOT PLAYLIST",
+          description: "asdfghgfdafsvfdv",
+          public: false, // Private playlist
+        }),
+      }
+    );
+
+    if (response.status != 201) {
+      console.log(response.status);
+      return -1;
+    }
+
+    console.log("Creating playlist");
+    const data = await response.json();
+    playlist_href = data.external_urls.spotify;
+    playlist_id = data.id;
+    console.log("playlistID!!!!");
+    console.log(playlist_id);
+
+    return 0;
+  }
+
+  app.post("/createPlaylist", function (req, res) {
+    createPlaylist(access_token).then((value) => {
+      if (value < 0) {
+        res.status(400).send();
+      } else {
+        res.status(200).send();
+      }
+    });
+  });
 
   app.get("/username", function (req, res) {
     if (display_name) {
@@ -189,6 +188,6 @@ module.exports = function (app) {
     console.log(res);
     // res.data("hiiii")
 
-    res.redirect("http://localhost:5173"); // Redirect to React app
+    res.redirect("http://localhost:5173/locations"); // Redirect to React app
   });
 };

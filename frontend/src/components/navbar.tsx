@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 const Navbar = () => {
     const [username, setUsername] = useState("");
-    const [token, setToken] = useState("");
+    // const [token, setToken] = useState("");
 
     const logout = () => {
         fetch('http://localhost:8080/logout')

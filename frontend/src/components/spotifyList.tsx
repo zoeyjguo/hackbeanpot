@@ -3,9 +3,8 @@ import Navbar from "./navbar";
 import { Box, Button } from "@mui/material";
 import SongList from "./SongList.tsx";
 import {Song} from "../types/spotify.ts";
-// import TravelPage from "./TravelPage";
 
-const Location = () => {
+const Playlist = () => {
     const [attractions, setAttractions] = useState(["att1", "att2", "att3"]);
 
     const [songs, setSongs] = useState<Song[]>([
@@ -123,21 +122,18 @@ const Location = () => {
     }
 
     return (
-        <Box>
+        <Box sx={{ minHeight: "100vh", padding: 3 }}>
             <Navbar />
             {/* box container that has items horzizontall center and stacked vertically */}
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
                 <SongList songs={songs} onDelete={handleDelete}/>
                 <Button type={"button"} onClick={handleSearchSongs}>Search song!!</Button>
                 <Button type={"button"} onClick={handleAddSong}>Add songs to playlist</Button>
-
             </Box>
             <Button type={"button"} onClick={handleStoreAttractions}>store attractions</Button>
             <Button type={"button"} onClick={handleGetAttractions}>Get Attractions</Button>
-
-
         </Box>
     )
 };
 
-export default Location;
+export default Playlist;

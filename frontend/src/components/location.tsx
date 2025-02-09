@@ -109,6 +109,34 @@ const Location = () => {
         }
     };
 
+    // send list of attraction names to generate_playlist
+    const handleCreatePlaylist = () => {
+        setLoadingPlaylist(true);
+        fetch('http://localhost:8080/generate_playlist', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                attractions: attractions.map(attraction => attraction.name)
+            })
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log("Successfully created playlist");
+                } else {
+                    console.log("Failed to create playlist");
+                }
+                setLoadingPlaylist(false);
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+
     return (
         <Box sx={{ minHeight: "100vh", padding: 3 }}>
             <Navbar />
@@ -260,10 +288,7 @@ const Location = () => {
                     <Button
                         disabled={loadingPlaylist}
                         onClick={() => {
-                            setLoadingPlaylist(true);
-                            setTimeout(() => {
-                                window.location.href = "/playlist";
-                            }, 5000);
+                            handleCreatePlaylist();
                         }}
                         sx={{
                             marginTop: 3,

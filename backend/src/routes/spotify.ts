@@ -1,3 +1,5 @@
+import {Song} from "../types/spotifyTypes";
+
 const { stringify } = require("querystring");
 const request = require("request"); // Ensure you have 'request' installed or included at the top
 
@@ -15,7 +17,6 @@ module.exports = function (app) {
   let display_name;
   let playlist_id;
   let playlist_href;
-  let searched_songs : string[];
 
   let user_id;
 
@@ -69,28 +70,29 @@ module.exports = function (app) {
     return 0;
   }
 
-  async function addSong(accessToken, uris: string[]): Promise<void> {
-    console.log("playlist_id");
-    console.log(playlist_id);
-    const response = await fetch('https://api.spotify.com/v1/playlists/' + playlist_id + '/tracks', {
+  async function addSong(accessToken, songList : Song[]): Promise<Response> {
+    console.log("In add song!");
+    console.log(songList);
+    let songURIs : string[] = [];
+    songList.map((song : Song) => {
+      songURIs.push(song.songURI);
+    })
+
+    return await fetch('https://api.spotify.com/v1/playlists/' + playlist_id + '/tracks', {
       method: 'POST',
       headers: {
         'Authorization': 'Bearer ' + accessToken,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        uris: uris,
+        uris: songURIs,
         position: 0
       })
-    })
-
-    const data = await response.json();
-
-    console.log("add song status");
-    console.log(data);
+    });
   }
 
-  async function searchSong(accessToken, genre: string, numSongs: number) : Promise<string[]> {
+  async function searchSong(accessToken, genre: string, numSongs: number) : Promise<Song[]> {
+    // make request to spotify server
     const response = await fetch('https://api.spotify.com/v1/search?q=genre%3D' + genre + '&type=track&market=US&limit=' + numSongs + '&offset=0', {
       method: 'GET',
       headers: {
@@ -98,17 +100,17 @@ module.exports = function (app) {
         'Content-Type': 'application/json'
       }
     })
-
+    // get data back from Spotify server
     const data = await response.json();
-    console.log("track array is:")
+
+    // parse data into song list
     const trackArray = data['tracks']['items'];
-    console.log(trackArray);
-    let songURIs : string[] = [];
-    trackArray.map(item => {
-      songURIs.push(item['uri']);
+    let searchedSongList : Song[] = [];
+    trackArray.map(track => {
+      searchedSongList.push({ songURI: track['uri'], songName: track['name'], albumIconLink: track['album']['images'][0]['url'] })
     });
 
-    return songURIs;
+    return searchedSongList;
   }
 
   app.post('/searchSongs', async function (req, res) {
@@ -116,20 +118,26 @@ module.exports = function (app) {
     const genre: string = data['genre'];
     const numSongs: number = data['numSongs']
 
-    console.log("searing for songs!!")
-    searched_songs = await searchSong(access_token, genre, numSongs);
-    console.log("FOUND SONGS!!")
-    console.log(searched_songs);
-
+    let returnedSearchedSongList : Song[] = await searchSong(access_token, genre, numSongs);
+    res.status(200).send(returnedSearchedSongList);
   })
 
   app.post('/addSong', function (req, res) {
     const data = req.body;
-    const uris : string[] = data['uris'];
+    const songList : Song[] = data['songs'];
+
+    console.log(songList);
 
     console.log("Before add song")
-    addSong(access_token, searched_songs);
-    console.log("added songs!!!")
+    addSong(access_token, songList)
+      .then(response => {
+        if (response.ok) {
+          res.sendStatus(200);
+        } else {
+          console.log()
+          res.sendStatus(400);
+        }
+      });
   })
 
 
@@ -153,7 +161,7 @@ module.exports = function (app) {
   });
 
   app.get('/login', function (req, res) {
-      const scope = 'user-read-private user-read-email playlist-modify-private';
+    const scope = 'user-read-private user-read-email playlist-modify-private';
 
     const url =
       "https://accounts.spotify.com/authorize?" +
@@ -228,11 +236,11 @@ module.exports = function (app) {
         scope = body.scope;
         expires_in = body.expires_in;
 
-        console.log("TOKENS!");
-        console.log(access_token);
-        console.log(refresh_token);
-        console.log(scope);
-        console.log(expires_in);
+        // console.log("TOKENS!");
+        // console.log(access_token);
+        // console.log(refresh_token);
+        // console.log(scope);
+        // console.log(expires_in);
 
         // we have access_token now!
         getProfile(access_token);

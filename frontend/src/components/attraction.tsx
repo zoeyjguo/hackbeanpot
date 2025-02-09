@@ -10,86 +10,100 @@ interface AttractionProps {
 }
 
 export default function Attraction({ place, onRemove }: AttractionProps) {
-    const photo = place.photos?.[0];
-    const photoUrl = photo ? photo.getUrl({ maxWidth: 400 }) : null;
+  const photo = place.photos?.[0];
+  const photoUrl = photo ? photo.getUrl({ maxWidth: 400 }) : null;
+
+  const isOpen = place.opening_hours?.isOpen() ?? false;
+  const openingStatus = isOpen ? "Open Now" : "Closed";
 
   return (
     <Card
-  sx={{
-    width: 345,
-    minHeight: 250,
-    display: "flex",
-    flexDirection: "column",
-    borderRadius: 5,
-    border: '2px solid #75ba81',
-    boxShadow: 3,
-    '&:hover': {
-        boxShadow: "0px 10px 50px 10px rgba(9, 115, 32, 0.25)",
-    },
-    overflow: 'hidden',
-    backgroundColor: 'transparent',
-    position: 'relative',
-  }}
->
-  {photoUrl ? (
-    <CardMedia
-      component="img"
-      alt={place.name}
-      height="140"
-      image={photoUrl}
       sx={{
-        borderRadius: '5px 5px 0 0',
-        width: 345,
-        minHeight: 250,
-      }}
-    />
-  ) : (
-    <Box
-      sx={{
-        height: 140,
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#f0f0f0',
-        borderRadius: '5px 5px 0 0',
+        flexDirection: 'row',
+        borderRadius: 5,
+        border: '2px solid #75ba81',
+        boxShadow: 3,
+        '&:hover': {
+          boxShadow: "0px 10px 50px 10px rgba(9, 115, 32, 0.25)",
+        },
+        position: 'relative',
+        width: '100%',
       }}
     >
-      <Typography variant="body2" sx={{ color: '#757575' }}>
-        No Image Available
-      </Typography>
-    </Box>
-  )}
+      {photoUrl ? (
+        <CardMedia
+          component="img"
+          alt={place.name}
+          image={photoUrl}
+          sx={{
+            width: 200,
+            height: 'auto',
+            objectFit: 'cover',
+            borderRadius: '5px 0 0 5px',
+          }}
+        />
+      ) : (
+        <Box
+          sx={{
+            width: 200,
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#f0f0f0',
+            borderRadius: '5px 0 0 5px',
+          }}
+        >
+          <Typography variant="body2" sx={{ color: '#757575' }}>
+            No Image Available
+          </Typography>
+        </Box>
+      )}
 
-  <Typography
-    sx={{
-      position: 'absolute',
-      top: 10,
-      left: 10,
-      color: 'white',
-      fontWeight: 'bold',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      padding: '5px',
-      borderRadius: '3px',
-    }}
-  >
-    {place.name}
-  </Typography>
-<Button
-    size="small"
-    onClick={onRemove}
-    sx={{
-      position: 'absolute',
-      top: 1,
-      right: 1,
-      "&:focus": { outline: "none" },
-      color: '#e53935',
-      fontSize: '1.2rem', // Larger X
-      textTransform: 'none',
-      padding: '0',
-    }}
-  >
-    ✖
-  </Button>
+      <Box sx={{ padding: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 'bold',
+            color: '#333',
+          }}
+        >
+          {place.name}
+        </Typography>
+
+        <Typography sx={{ color: '#757575', textAlign: 'left' }}>
+          {place.vicinity ? `Location: ${place.vicinity}` : 'Location: Not available'}
+        </Typography>
+        <Typography sx={{ color: '#757575', textAlign: 'left' }}>
+          {`Rating: ${place.rating} (${place.user_ratings_total} reviews)`}
+        </Typography>
+        <Typography
+          sx={{
+            color: isOpen ? '#2E7D32' : '#D32F2F',
+            textAlign: 'left',
+            fontWeight: 'bold'
+          }}
+        >
+          {`Opening Status: ${openingStatus}`}
+        </Typography>
+
+        <Button
+          size="small"
+          onClick={onRemove}
+          sx={{
+            position: 'absolute',
+            top: 10,
+            right: 10,
+            color: '#e53935',
+            fontSize: '1.2rem',
+            textTransform: 'none',
+            padding: '0',
+          }}
+        >
+          ✖
+        </Button>
+      </Box>
     </Card>
   );
 }

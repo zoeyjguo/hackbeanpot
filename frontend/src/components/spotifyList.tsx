@@ -88,6 +88,7 @@ const Playlist = () => {
               if (response.ok) {
                 setSnackbarText("Successfully created playlist");
                 setOpenSnackbar(true);
+                  setSongs([]);
                   console.log("Successfully added song(s)");
               } else {
                 setSnackbarText("Error: unable to create playlist");

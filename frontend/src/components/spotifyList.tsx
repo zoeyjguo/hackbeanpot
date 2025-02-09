@@ -10,7 +10,7 @@ const Playlist = () => {
     const [songs, setSongs] = useState<Song[]>([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarText, setSnackbarText] = useState("");
-    
+
     useEffect(() => {
       return () => {
         fetchGeneratedSongs();
@@ -154,7 +154,9 @@ const Playlist = () => {
             <Navbar />
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
                 <SongList songs={songs} onDelete={handleDelete}/>
-                <Button type={"button"} onClick={handleAddSong}>Add Playlist to Spotify Account</Button>
+                <Button type={"button"}
+                        sx={{ color: "#ffffff", backgroundColor: "#55b859", '&:hover': { backgroundColor: "#529f58" } }}
+                        onClick={handleAddSong}>Add Playlist to Spotify Account</Button>
             </Box>
             <Snackbar
                 open={openSnackbar}

@@ -13,6 +13,7 @@ app.use(cors({
 app.use(express.json());
 
 require('./routes/spotify')(app);
+require('./routes/attractions')(app);
 
 app.listen(8080, () => {
     console.log('server listening on port 8080')

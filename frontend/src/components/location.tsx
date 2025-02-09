@@ -77,7 +77,7 @@ const Location = () => {
                 const j = Math.floor(Math.random() * routePath.length);
                 const location = { lat: routePath[j].lat(), lng: routePath[j].lng() };
                 const attraction = await fetchAttraction(location);
-                if (attraction) {
+                if (attraction && !attractions.some((a) => a.name === attraction.name)) {
                     attractions.push(attraction);
                 } else {
                     console.log("No attraction found");

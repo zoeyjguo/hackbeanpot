@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "./navbar";
 import Autocomplete from "react-google-autocomplete";
-import { Box, Button, TextField, Typography, AutocompleteRenderInputParams, Snackbar, Alert, IconButton } from "@mui/material";
+import { Box, Button, TextField, Typography, AutocompleteRenderInputParams, Snackbar, Alert, IconButton, CircularProgress } from "@mui/material";
 import Attraction from "./attraction";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -13,8 +13,10 @@ const Location = () => {
     const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
     const [attractions, setAttractions] = useState<google.maps.places.PlaceResult[]>([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const getRoute = () => {
+        setLoading(true);
         if (!startingCoordinates || !endingCoordinates) return;
         
         const directionsService = new google.maps.DirectionsService();
@@ -29,6 +31,7 @@ const Location = () => {
                     setDirections(result);
                 } else {
                     setOpenSnackbar(true);
+                    setLoading(false);
                 }
             }
         );
@@ -67,6 +70,7 @@ const Location = () => {
 
         // Function to fetch attractions asynchronously
         const fetchAttractions = async () => {
+            setLoading(true);
             while (attractions.length < totalAttractions && tries < maxTries) {
                 tries++;
                 const j = Math.floor(Math.random() * routePath.length);
@@ -84,6 +88,7 @@ const Location = () => {
             }
             console.log("FINISHED")
             setAttractions(attractions);
+            setLoading(false);
         };
         // Call the function to fetch attractions
         fetchAttractions();
@@ -174,7 +179,7 @@ const Location = () => {
                     </Box>
                 </Box>
                 <Button
-                    disabled={startingLocation === "" || endingLocation === ""}
+                    disabled={startingLocation === "" || endingLocation === "" || loading}
                     onClick={() => {
                         getRoute();
                     }}
@@ -195,7 +200,7 @@ const Location = () => {
                         },
                     }}
                 >
-                    Next
+                    {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Generate Attractions"} {/* Show spinner when loading */}
                 </Button>
             </Box>
             <Snackbar

@@ -42,10 +42,10 @@ const Location = () => {
         if (!directions) return; // Ensure directions are available
         console.log("Directions:", directions);
         const routePath = directions.routes[0].overview_path;
-        const totalAttractions = Math.floor(routePath.length / 50);
+        const totalAttractions = Math.floor(routePath.length / 30);
         const attractions : google.maps.places.PlaceResult[] = [];
         const service = new google.maps.places.PlacesService(document.createElement("div"));
-        const maxTries = 5;
+        const maxTries = 10;
         let tries = 0;
 
         // Function to fetch a single nearby attraction

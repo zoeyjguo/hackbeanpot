@@ -1,13 +1,27 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import Autocomplete from "react-google-autocomplete";
+import { TextField } from "@mui/material";
+import { AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
 
 const TravelPage = () => {
   const [mood, setMood] = useState('');
   const [activity, setActivity] = useState('');
+  const [startingLocation, setStartingLocation] = useState("");
+    const [endingLocation, setEndingLocation] = useState("");
+
+    const handleStartingLocationChange = (place: google.maps.places.PlaceResult) => {
+        setStartingLocation(place.formatted_address || "");
+    };
+
+    const handleEndingLocationChange = (place: google.maps.places.PlaceResult) => {
+        setEndingLocation(place.formatted_address || "");
+    };
 
   const handleSearch = () => {
     alert(`Searching for mood: ${mood}, activity: ${activity}`);
   };
+  
 
   return (
     <HomepageContainer>
@@ -18,13 +32,29 @@ const TravelPage = () => {
         <FormContainer>
           <h2>Travel</h2>
           <InputGroup>
-            <LocationInput placeholder="Starting location" />
+            {/* <LocationInput placeholder="Starting location" />
             <LocationInput placeholder="Ending location" />
             <DateInput type="date" />
-            <DateInput type="date" />
+            <DateInput type="date" /> */}
+            <Autocomplete
+                                apiKey={import.meta.env.VITE_GOOGLE_MAP_API_KEY}
+                                onPlaceSelected={handleStartingLocationChange}
+                                style={{ width: 300 }}
+                                renderInput={(params: AutocompleteRenderInputParams) => (
+                                    <TextField {...params} label="Starting location" variant="outlined" />
+                                )}
+                            />
+            <Autocomplete
+                                apiKey={import.meta.env.VITE_GOOGLE_MAP_API_KEY}
+                                onPlaceSelected={handleEndingLocationChange}
+                                style={{ width: 300 }}
+                                renderInput={(params: AutocompleteRenderInputParams) => (
+                                    <TextField {...params} label="Ending location" variant="outlined" />
+                                )}
+                            />
           </InputGroup>
 
-          <MoodAndActivity>
+          {/* <MoodAndActivity>
             <InputGroup>
               <MoodInput
                 placeholder="Enter mood/vibe"
@@ -37,9 +67,17 @@ const TravelPage = () => {
                 onChange={(e) => setActivity(e.target.value)}
               />
             </InputGroup>
-          </MoodAndActivity>
+          </MoodAndActivity> */}
 
-          <SearchButton onClick={handleSearch}>Search</SearchButton>
+          {/* Button that says next and it only works when both locations are filled in */}
+          <SearchButton
+                    disabled={startingLocation === "" || endingLocation === ""}
+                    onClick={() => {
+                        console.log(startingLocation, endingLocation);
+                    }}
+                >
+                    Next
+                </SearchButton>
         </FormContainer>
       </HomepageBox1>
 

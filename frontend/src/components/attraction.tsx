@@ -29,6 +29,7 @@ export default function Attraction({ place, onRemove }: AttractionProps) {
         },
         position: 'relative',
         width: '100%',
+        minHeight: 150,
       }}
     >
       {photoUrl ? (
@@ -38,8 +39,7 @@ export default function Attraction({ place, onRemove }: AttractionProps) {
           image={photoUrl}
           sx={{
             width: 200,
-            height: 'auto',
-            objectFit: 'cover',
+            height: 150,
             borderRadius: '5px 0 0 5px',
           }}
         />
@@ -61,12 +61,19 @@ export default function Attraction({ place, onRemove }: AttractionProps) {
         </Box>
       )}
 
-      <Box sx={{ padding: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <Box sx={{
+        padding: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        flexGrow: 1,
+      }}>
         <Typography
           variant="h6"
           sx={{
             fontWeight: 'bold',
             color: '#333',
+            textAlign: 'left',
           }}
         >
           {place.name}

@@ -1,13 +1,16 @@
 import {useEffect, useState} from "react";
 import Navbar from "./navbar";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Snackbar, Alert, IconButton } from "@mui/material";
 import SongList from "./SongList.tsx";
 import {Song} from "../types/spotify.ts";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Playlist = () => {
     const [attractions, setAttractions] = useState(["att1", "att2", "att3"]);
     const [songs, setSongs] = useState<Song[]>([]);
-
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarText, setSnackbarText] = useState("");
+    
     useEffect(() => {
       return () => {
         fetchGeneratedSongs();
@@ -83,8 +86,12 @@ const Playlist = () => {
         })
           .then(response => {
               if (response.ok) {
+                setSnackbarText("Successfully created playlist");
+                setOpenSnackbar(true);
                   console.log("Successfully added song(s)");
               } else {
+                setSnackbarText("Error: unable to create playlist");
+                setOpenSnackbar(true);
                   console.log("ERROR: unable to add song(s)");
               }
           })
@@ -144,14 +151,27 @@ const Playlist = () => {
     return (
         <Box sx={{ minHeight: "100vh", padding: 3 }}>
             <Navbar />
-            {/* box container that has items horzizontall center and stacked vertically */}
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
                 <SongList songs={songs} onDelete={handleDelete}/>
-                <Button type={"button"} onClick={handleSearchSongs}>Search song!!</Button>
-                <Button type={"button"} onClick={handleAddSong}>Add songs to playlist</Button>
+                <Button type={"button"} onClick={handleAddSong}>Add Playlist to Spotify Account</Button>
             </Box>
-            <Button type={"button"} onClick={handleStoreAttractions}>store attractions</Button>
-            <Button type={"button"} onClick={handleGetAttractions}>Get Attractions</Button>
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={6000} // Closes automatically after 6 seconds
+                onClose={() => setOpenSnackbar(false)}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            >
+                <Alert
+                    sx={{ display: "flex", alignItems: "center" }}
+                    action={
+                        <IconButton size="small" onClick={() => setOpenSnackbar(false)} color="inherit">
+                            <CloseIcon fontSize="small" />
+                        </IconButton>
+                    }
+                >
+                    {snackbarText}
+                </Alert>
+            </Snackbar>
         </Box>
     )
 };

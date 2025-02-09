@@ -18,34 +18,34 @@ export default function SongList({ songs, onDelete } : SongListProps) {
 
   return (
     <>
-      <Typography>Preview Songs</Typography>
-    <List>
-      {songs.map((song, index) => (
-        <ListItem
-          key={index}
-          secondaryAction={
-            <IconButton
-              edge="end"
-              aria-label="delete"
-              onClick={() => onDelete(index)}
-            >
-              <DeleteIcon style={{ color: "white" }}/>
-            </IconButton>
-          }
-          sx={{}}
-        >
-          <ListItemAvatar>
-            <Avatar
-              src={song.albumIconLink}
-              sx={{ width: 56, height: 56, mr: 2 }}
+      <Typography variant="h4" sx={{marginTop:"20px"}}>Playlist</Typography>
+      <List>
+        {songs.map((song, index) => (
+          <ListItem
+            key={index}
+            secondaryAction={
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={() => onDelete(index)}
+              >
+                <DeleteIcon style={{ color: "white" }}/>
+              </IconButton>
+            }
+            sx={{}}
+          >
+            <ListItemAvatar>
+              <Avatar
+                src={song.albumIconLink}
+                sx={{ width: 56, height: 56, mr: 2 }}
+              />
+            </ListItemAvatar>
+            <ListItemText
+              primary={song.songName}
             />
-          </ListItemAvatar>
-          <ListItemText
-            primary={song.songName}
-          />
-        </ListItem>
-      ))}
-    </List>
+          </ListItem>
+        ))}
+      </List>
     </>
   )
 }

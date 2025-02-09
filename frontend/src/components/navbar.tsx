@@ -55,11 +55,11 @@ const Navbar = () => {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" style={{ background: colors.green[500]}}>
+        <AppBar position="static" style={{ background: colors.green[500], borderRadius: '12px'}}>
             <Toolbar>
             {username && (
                 <Box>
-                <Typography color='#000000' fontWeight={'bold'} fontSize={16} fontFamily={"Inter, system-ui, Avenir, Helvetica, Arial, sans-serif"}>
+                <Typography color='#ffffff' fontWeight={'bold'} fontSize={16} fontFamily={"Inter, system-ui, Avenir, Helvetica, Arial, sans-serif"}>
                     Hi {username}!
                 </Typography>
                 </Box>

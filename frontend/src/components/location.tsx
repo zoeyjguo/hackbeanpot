@@ -157,7 +157,7 @@ const Location = () => {
                 <Button
                     disabled={startingLocation === "" || endingLocation === ""}
                     onClick={() => {
-                        console.log(startingCoordinates, endingCoordinates);
+                        getRoute();
                     }}
                     sx={{
                         marginTop: 3,

@@ -32,26 +32,56 @@ const Location = () => {
 
     useEffect(() => {
         if (!directions) return; // Ensure directions are available
-
         console.log("Directions:", directions);
-
         const routePath = directions.routes[0].overview_path;
+        const totalAttractions = Math.floor(routePath.length / 50);
+        const attractions : google.maps.places.PlaceResult[] = [];
         const service = new google.maps.places.PlacesService(document.createElement("div"));
+        const maxTries = 5;
+        let tries = 0;
 
-        for (let j = 0; j < routePath.length; j += 40) {
-            service.nearbySearch(
-                {
-                    location: { lat: routePath[j].lat(), lng: routePath[j].lng() },
-                    radius: 400,
-                    type: "tourist_attraction",
-                },
-                (results, status) => {
-                    if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-                        console.log("Results:", results);
+        // Function to fetch a single nearby attraction
+        const fetchAttraction = (location: google.maps.LatLngLiteral) => {
+            return new Promise<google.maps.places.PlaceResult | null>((resolve) => {
+                service.nearbySearch(
+                    {
+                        location,
+                        type: "tourist_attraction",
+                        rankBy: google.maps.places.RankBy.DISTANCE,
+                    },
+                    (results, status) => {
+                        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+                            resolve(results[0]);
+                            console.log("Attraction Found");
+                        } else {
+                            resolve(null);
+                        }
                     }
+                );
+            });
+        };
+
+        // Function to fetch attractions asynchronously
+        const fetchAttractions = async () => {
+            while (attractions.length < totalAttractions && tries < maxTries) {
+                tries++;
+                let j = Math.floor(Math.random() * routePath.length);
+                const location = { lat: routePath[j].lat(), lng: routePath[j].lng() };
+                const attraction = await fetchAttraction(location);
+                if (attraction) {
+                    attractions.push(attraction);
+                } else {
+                    console.log("No attraction found");
                 }
-            );
-        }
+            }
+            // Now attractions are fully populated, and we can safely iterate over them
+            for (const attraction of attractions) {
+                console.log(attraction.name);
+            }
+            console.log("FINISHED")
+        };
+        // Call the function to fetch attractions
+        fetchAttractions();
     }, [directions]);
 
     const handleStartingLocationChange = (place: google.maps.places.PlaceResult) => {
@@ -81,6 +111,7 @@ const Location = () => {
                     apiKey={import.meta.env.VITE_GOOGLE_MAP_API_KEY}
                     onPlaceSelected={handleStartingLocationChange}
                     style={{ width: 300 }}
+                    options={{ types: ["geocode"] }}
                     renderInput={(params: AutocompleteRenderInputParams) => (
                         <TextField {...params} label="Starting location" variant="outlined" />
                     )}
@@ -90,6 +121,7 @@ const Location = () => {
                     apiKey={import.meta.env.VITE_GOOGLE_MAP_API_KEY}
                     onPlaceSelected={handleEndingLocationChange}
                     style={{ width: 300 }}
+                    options={{ types: ["geocode"] }}
                     renderInput={(params: AutocompleteRenderInputParams) => (
                         <TextField {...params} label="Ending location" variant="outlined" />
                     )}

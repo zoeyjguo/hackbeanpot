@@ -32,13 +32,13 @@ function Home() {
               To get started, click the "Login with Spotify" button above.
             </p>
             </div>
-              <div className="App-form" style={{ gap: "10px" }}>
+              {/* <div className="App-form" style={{ gap: "10px" }}>
                 Playlist name: <input type="text" id={playlistName} maxLength={200} style={{ marginRight: "10px" }} 
                 onChange={event => setPlaylistName(event.target.value)} />
                 Number of songs per attraction: <input type="number" id={numSongs.toString()} min="1" max="3" 
                   onChange={event => setNumSongs(Number(event.target.value))} defaultValue="1"/>
               </div>
-            <button onClick={createPlaylist} disabled={checkValidity()}>Create Playlist</button>
+            <button onClick={createPlaylist} disabled={checkValidity()}>Create Playlist</button> */}
           </header>
         </div>
         

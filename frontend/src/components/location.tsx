@@ -1,10 +1,13 @@
 import Navbar from "./navbar";
+import TravelPage from "./TravelPage";
 
 const Location = () => {
     return (
         <div>
             <Navbar />
-            <h1>Location</h1>
+            <div className="min-h-screen bg-gray-100 py-10">
+          <TravelPage />
+        </div>
         </div>
     )
 }

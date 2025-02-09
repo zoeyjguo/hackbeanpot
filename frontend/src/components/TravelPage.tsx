@@ -15,7 +15,8 @@ const TravelPage = () => {
         <FormContainer>
           <h2>Travel</h2>
           <InputGroup>
-            <LocationInput placeholder="Where are you going?" />
+            <LocationInput placeholder="Starting location" />
+            <LocationInput placeholder="Ending location" />
             <DateInput type="date" />
             <DateInput type="date" />
           </InputGroup>
@@ -47,14 +48,6 @@ const TravelPage = () => {
           <SearchButton onClick={handleSearch}>Search</SearchButton>
         </FormContainer>
       </HomepageBox1>
-
-      <PromoSection>
-        <PromoContent>
-          <h1>Save instantly with Expedia Rewards</h1>
-          <p>You can enjoy access to perks like Member Prices, saving you 10% or more on select hotels.</p>
-          <PromoButton>See Member Prices</PromoButton>
-        </PromoContent>
-      </PromoSection>
     </HomepageContainer>
   );
 };
@@ -149,24 +142,6 @@ const PromoSection = styled.div`
   margin: 50px 0;
   padding: 120px 60px;
   color: white;
-`;
-
-const PromoContent = styled.div`
-  max-width: 30%;
-`;
-
-const PromoButton = styled.button`
-  background-color: #3662d8;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #2f3aa0;
-  }
 `;
 
 export default TravelPage;

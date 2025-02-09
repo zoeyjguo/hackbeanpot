@@ -2,7 +2,8 @@
   "scripts": {
     "server": "npm run dev --prefix backend",
     "client": "npm run dev --prefix frontend",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "setup": "npm install && npm install --prefix frontend && npm install --prefix backend"
   },
   "dependencies": {
     "concurrently": "^9.1.2",

@@ -10,7 +10,7 @@ const Playlist = () => {
     const [songs, setSongs] = useState<Song[]>([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarText, setSnackbarText] = useState("");
-    
+
     useEffect(() => {
       return () => {
         fetchGeneratedSongs();
@@ -58,10 +58,6 @@ const Playlist = () => {
           })
           .then(data => setSongs(data))
           .catch(error => console.error('Error:', error));
-    }
-
-    const handleSearchSongs = () => {
-        searchSong("anything", "classical", 5);
     }
 
     const handleDelete = (index : number) => {
@@ -151,20 +147,36 @@ const Playlist = () => {
     }
 
     return (
-        <Box sx={{ minHeight: "100vh", padding: 3 }}>
+        <Box sx={{ minHeight: "100vh", backgroundColor: "#f4f4f9", padding: 3 }}>
             <Navbar />
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-                <SongList songs={songs} onDelete={handleDelete}/>
-                <Button type={"button"} onClick={handleAddSong}>Add Playlist to Spotify Account</Button>
+                <SongList songs={songs} onDelete={handleDelete} />
+                <Button
+                    type={"button"}
+                    sx={{
+                        color: "#ffffff",
+                        backgroundColor: "#55b859",
+                        '&:hover': { backgroundColor: "#529f58" },
+                        padding: "12px 24px",
+                        fontWeight: "bold",
+                        borderRadius: "8px",
+                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                        transition: "transform 0.2s ease-in-out",
+                        '&:active': { transform: "scale(0.98)" }
+                    }}
+                    onClick={handleAddSong}
+                >
+                    Add Playlist to Spotify Account
+                </Button>
             </Box>
             <Snackbar
                 open={openSnackbar}
-                autoHideDuration={6000} // Closes automatically after 6 seconds
+                autoHideDuration={6000}
                 onClose={() => setOpenSnackbar(false)}
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             >
                 <Alert
-                    sx={{ display: "flex", alignItems: "center" }}
+                    sx={{ display: "flex", alignItems: "center", backgroundColor: "#4caf50", color: "#fff" }}
                     action={
                         <IconButton size="small" onClick={() => setOpenSnackbar(false)} color="inherit">
                             <CloseIcon fontSize="small" />

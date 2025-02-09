@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import Navbar from "./navbar";
 import Autocomplete from "react-google-autocomplete";
-import { Box, Button, TextField, Typography, AutocompleteRenderInputParams } from "@mui/material";
+import { Box, Button, TextField, Typography, AutocompleteRenderInputParams, Snackbar, Alert, IconButton } from "@mui/material";
+import Attraction from "./attraction";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Location = () => {
     const [startingLocation, setStartingLocation] = useState("");
@@ -9,6 +11,8 @@ const Location = () => {
     const [startingCoordinates, setStartingCoordinates] = useState<{ lat: number, lng: number } | null>(null);
     const [endingCoordinates, setEndingCoordinates] = useState<{ lat: number, lng: number } | null>(null);
     const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
+    const [attractions, setAttractions] = useState<google.maps.places.PlaceResult[]>([]);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const getRoute = () => {
         if (!startingCoordinates || !endingCoordinates) return;
@@ -24,7 +28,7 @@ const Location = () => {
                 if (status === google.maps.DirectionsStatus.OK) {
                     setDirections(result);
                 } else {
-                    console.error("Error fetching directions:", status);
+                    setOpenSnackbar(true);
                 }
             }
         );
@@ -76,9 +80,10 @@ const Location = () => {
             }
             // Now attractions are fully populated, and we can safely iterate over them
             for (const attraction of attractions) {
-                console.log(attraction.name);
+                console.log(attraction);
             }
             console.log("FINISHED")
+            setAttractions(attractions);
         };
         // Call the function to fetch attractions
         fetchAttractions();
@@ -112,8 +117,14 @@ const Location = () => {
                     margin: "100px auto 0",
                     padding: 4,
                     borderRadius: 4,
-                    boxShadow: "0px 10px 50px 10px rgba(9, 115, 32, 0.5)"
-
+                    boxShadow: "0px 10px 50px 10px rgba(9, 115, 32, 0.25)", // Default box shadow
+                    "&:hover": { // On hover
+                        boxShadow: "0px 10px 50px 10px rgba(9, 115, 32, 0.5)", // Lighter shadow for glow effect
+                    },
+                    "@media (max-width: 600px)": {
+                        padding: 2, // Adjust padding for smaller screens
+                        margin: "50px auto 0", // Adjust margin for smaller screens
+                    },
                 }}
             >
                 <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: 2 }}>
@@ -125,28 +136,36 @@ const Location = () => {
                         flexDirection: "row",
                         gap: 4,
                         width: "100%",
+                        "@media (max-width: 800px)": {
+                            flexDirection: "column", // Stack them vertically on small screens
+                            gap: 2, // Adjust the gap between the fields for smaller screens
+                            flexWrap: "wrap", // Wrap the fields to the next line if they don't fit
+                            alignItems: "center", // Center the fields horizontally
+                        },
                     }}
                 >
-                    <Box sx={{ width: "50%" }}>
+                    <Box sx={{ width: "100%", maxWidth: 400, display: "flex", flexDirection: "column", alignItems: "center" }}>
                         <Typography variant="subtitle1" sx={{ fontWeight: "500", marginBottom: 1}}>
                             Starting Location:
                         </Typography>
                         <Autocomplete
                             apiKey={import.meta.env.VITE_GOOGLE_MAP_API_KEY}
                             onPlaceSelected={handleStartingLocationChange}
+                            options={{ types: ["geocode"] }}
                             style={{ width: 300, border: '2px solid #75ba81'}}
                             renderInput={(params: AutocompleteRenderInputParams) => (
                                 <TextField {...params} label="Starting location" variant="outlined" />
                             )}
                         />
                     </Box>
-                    <Box sx={{ width: "50%" }}>
+                    <Box sx={{ width: "100%", maxWidth: 400, display: "flex", flexDirection: "column", alignItems: "center" }}>
                         <Typography variant="subtitle1" sx={{ fontWeight: "500",  marginBottom: 1 }}>
                             Ending Location:
                         </Typography>
                         <Autocomplete
                             apiKey={import.meta.env.VITE_GOOGLE_MAP_API_KEY}
                             onPlaceSelected={handleEndingLocationChange}
+                            options={{ types: ["geocode"] }}
                             style={{ width: 300, border: '2px solid #75ba81'}}
                             renderInput={(params: AutocompleteRenderInputParams) => (
                                 <TextField {...params} label="Ending location" variant="outlined" />
@@ -179,6 +198,60 @@ const Location = () => {
                     Next
                 </Button>
             </Box>
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={6000} // Closes automatically after 6 seconds
+                onClose={() => setOpenSnackbar(false)}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            >
+                <Alert
+                    severity="error"
+                    sx={{ display: "flex", alignItems: "center" }}
+                    action={
+                        <IconButton size="small" onClick={() => setOpenSnackbar(false)} color="inherit">
+                            <CloseIcon fontSize="small" />
+                        </IconButton>
+                    }
+                >
+                    Route not found. Try different locations.
+                </Alert>
+            </Snackbar>
+            {attractions.length > 0 && (
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 3,
+                        maxWidth: 800,
+                        margin: "50px auto 0",
+                        padding: 4,
+                        borderRadius: 4,
+                        boxShadow: "0px 10px 50px 10px rgba(9, 115, 32, 0.25)", // Default box shadow
+                        "&:hover": { // On hover
+                            boxShadow: "0px 10px 50px 10px rgba(9, 115, 32, 0.5)", // Lighter shadow for glow effect
+                        },
+                    }}
+                >
+                    <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+                        Attractions
+                    </Typography>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column", // Ensures a single column layout
+                            alignItems: "center", // Centers all items horizontally
+                            gap: 2,
+                            width: "100%",
+                        }}
+                    >
+                        {attractions.map((attraction, index) => (
+                            <Attraction key={index} place={attraction} onRemove={() => {}} />
+                        ))}
+                    </Box>
+                </Box>
+            )}
         </Box>
     );
 };

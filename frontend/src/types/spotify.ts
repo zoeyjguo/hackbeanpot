@@ -1,7 +1,12 @@
 export interface Song {
-  songURI: string
-  songName: string,
-  albumIconLink: string
+  songURI: string;
+  songName: string;
+  albumIconLink: string;
+  artistName: string;
+  albumRelease: string;
+  albumName: string;
+  release_date: string;
+  artistURI: string;
 }
 
 export interface SongListProps {

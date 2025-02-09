@@ -36,7 +36,7 @@ module.exports = function (app) {
 
         const generateSong = async (attraction: string) => {
             const prompt = `Find an existing song for this attraction: ${attraction} based off of the location, vibes, and language of the attraction. 
-            output 1 song in the format of: artist name - song title`;
+            output 1 song in the format of: artist name - song title. No matter what, find a single song and only output the song title and artist name.`;
             const result = await model.generateContent(prompt);
             return result.response.text(); // Extract text response from Gemini
         };

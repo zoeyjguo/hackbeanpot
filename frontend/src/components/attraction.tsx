@@ -106,6 +106,9 @@ export default function Attraction({ place, onRemove }: AttractionProps) {
             fontSize: '1.2rem',
             textTransform: 'none',
             padding: '0',
+            "&:focus": {
+              outline: "none",
+            },
           }}
         >
           ✖

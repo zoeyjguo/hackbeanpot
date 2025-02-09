@@ -51,7 +51,7 @@ const Navbar = () => {
         // api call and response
         // store response in a state variable
         console.log("end api call")
-    }, [])
+    }, [username])
 
     return (
         <Box sx={{ flexGrow: 1 }}>

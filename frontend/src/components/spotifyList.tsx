@@ -8,7 +8,28 @@ const Playlist = () => {
     const [attractions, setAttractions] = useState(["att1", "att2", "att3"]);
     const [songs, setSongs] = useState<Song[]>([]);
 
+    useEffect(() => {
+      return () => {
+        fetchGeneratedSongs();
+      };
+    }, []);
 
+
+    const fetchGeneratedSongs = () => {
+        fetch('http://localhost:8080/getGeneratedSongs', {
+            method: 'GET'
+        })
+          .then(response => {
+              if (response.ok) {
+                  console.log("SUCCESS: fetched generated songs");
+                  return response.json()
+              } else {
+                  console.log("ERROR: unable to fetch generated songs");
+                  return;
+              }
+          })
+          .then(data => setSongs(data.spotifySongsList))
+    }
 
 
 
@@ -46,17 +67,18 @@ const Playlist = () => {
 
     const handleAddSong = async () => {
         await createPlaylist();
-        addSongs();
+        console.log("Songs are now:", songs);
+        addSongs(songs);
     }
 
-    const addSongs = () => {
+    const addSongs = (songsToAdd : Song[]) => {
         fetch('http://localhost:8080/addSong', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                songs: songs
+                songs: songsToAdd
             })
         })
           .then(response => {
@@ -104,9 +126,6 @@ const Playlist = () => {
           .then(attractions => setAttractions(attractions))
           .catch(error => console.error('Error:', error));
     }
-
-    console.log(attractions);
-
 
     const createPlaylist = async () => {
         const response = await fetch('http://localhost:8080/createPlaylist', {

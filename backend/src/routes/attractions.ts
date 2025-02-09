@@ -22,7 +22,8 @@ module.exports = function (app) {
     res.sendStatus(200);
   })
 
-  app.get('/getAttractions', function (req, res) {
+  app.get('/getGeneratedSongs', function (req, res) {
+    console.log("sending generated songs!", spotifySongs);
     res.status(200).json({
       spotifySongsList: spotifySongs
     });

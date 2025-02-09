@@ -10,6 +10,12 @@ import {Typography} from "@mui/material";
 
 
 export default function SongList({ songs, onDelete } : SongListProps) {
+  if (songs.length == 0) {
+    return (
+      <></>
+    )
+  }
+
   return (
     <>
       <Typography>Preview Songs</Typography>

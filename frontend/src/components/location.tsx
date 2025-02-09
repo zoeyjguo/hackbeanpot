@@ -124,14 +124,11 @@ const Location = () => {
             .then(response => {
                 if (response.ok) {
                     console.log("Successfully created playlist");
+                    window.location.href = "http://localhost:5173/playlist"
                 } else {
                     console.log("Failed to create playlist");
                 }
                 setLoadingPlaylist(false);
-                return response.json();
-            })
-            .then(data => {
-                console.log(data);
             })
             .catch(error => console.error('Error:', error));
     }

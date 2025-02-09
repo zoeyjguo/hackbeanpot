@@ -1,10 +1,13 @@
 import {Attraction} from "../types/attractionType";
 import {Request, Response} from "express";
+import {Song} from "../types/spotifyTypes";
 const GOOGLE_API_KEY= 'AIzaSyAXgkpWUfbn4JvXolEKxO4cDkuBJjHXHTg'
 
 module.exports = function (app) {
   // variables
   let attractions : Attraction[] = []
+  let spotifySongs : Song[] = [];
+
 
   app.post('/addAttractions', function (req, res) {
     const data = req.body;
@@ -21,7 +24,7 @@ module.exports = function (app) {
 
   app.get('/getAttractions', function (req, res) {
     res.status(200).json({
-      attractions: attractions
+      spotifySongsList: spotifySongs
     });
   })
 
@@ -41,19 +44,47 @@ module.exports = function (app) {
             return result.response.text(); // Extract text response from Gemini
         };
 
+        console.log("getting songs!");
         const songs = await Promise.all(
           attractions.map(async (attraction) => ({
             attraction,
                 song: await generateSong(attraction),
             }))
         );
-        res.json({ songs: songs });
 
-        console.log(songs);
+        console.log("get thing");
+        const songResults = await Promise.all(
+          songs.map(song => searchWildSong(song.song, '', 1))
+        );
+
+        songResults.forEach(result => {
+          spotifySongs.push(...result);
+        });
+
+        console.log("we got these songs")
+        console.log(spotifySongs);
+        res.sendStatus(200);
     }
     catch (e){
         console.error(e)
         res.status(500).json({error: "Failed while calling Gemini API"});
     }
-});
+  });
+
+  const searchWildSong = async (wildcard: string, searchParamGenre: string, searchParamNum: number) : Promise<Song[]> => {
+    console.log("Searching for wildcard:", wildcard)
+    const response = await fetch('http://localhost:8080/searchSongs', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        wildcard: wildcard,
+        genre: searchParamGenre,
+        numSongs: searchParamNum
+      })
+    })
+
+    return await response.json();
+  }
 }

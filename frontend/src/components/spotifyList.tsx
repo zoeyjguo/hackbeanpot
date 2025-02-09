@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import Navbar from "./navbar";
 import { Box, Button } from "@mui/material";
 import SongList from "./SongList.tsx";
@@ -6,19 +6,20 @@ import {Song} from "../types/spotify.ts";
 
 const Playlist = () => {
     const [attractions, setAttractions] = useState(["att1", "att2", "att3"]);
+    const [songs, setSongs] = useState<Song[]>([]);
 
-    const [songs, setSongs] = useState<Song[]>([
-        { songURI: '', songName: "Song One", albumIconLink: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" },
-        { songURI: '', songName: "Song Two", albumIconLink: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228d" },
-        { songURI: '', songName: "Song Three", albumIconLink: "https://m.media-amazon.com/images/M/MV5BYWMzYTFkZGEtOWEzZS00NDQyLTgwYjQtZTk2NThjNjNjZGJmXkEyXkFqcGc@._V1_.jpg" }
-    ]);
-    const searchSong = (searchParamGenre : string, searchParamNum : number) => {
+
+
+
+
+    const searchSong = (wildcard: string, searchParamGenre : string, searchParamNum : number) => {
         fetch('http://localhost:8080/searchSongs', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
+                wildcard: wildcard,
                 genre: searchParamGenre,
                 numSongs: searchParamNum
             })
@@ -36,7 +37,7 @@ const Playlist = () => {
     }
 
     const handleSearchSongs = () => {
-        searchSong("classical", 5);
+        searchSong("anything", "classical", 5);
     }
 
     const handleDelete = (index : number) => {

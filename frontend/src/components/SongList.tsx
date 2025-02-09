@@ -10,12 +10,6 @@ import {Typography} from "@mui/material";
 
 
 export default function SongList({ songs, onDelete } : SongListProps) {
-  if (songs.length == 0) {
-    return (
-      <></>
-    )
-  }
-
   return (
     <>
       <Typography variant="h4" sx={{marginTop:"20px"}}>Playlist</Typography>
@@ -43,6 +37,8 @@ export default function SongList({ songs, onDelete } : SongListProps) {
             <ListItemText
               primary={song.songName}
             />
+            {song.artistName}
+            {song.albumRelease}
           </ListItem>
         ))}
       </List>

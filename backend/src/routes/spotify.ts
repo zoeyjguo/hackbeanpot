@@ -107,7 +107,7 @@ module.exports = function (app) {
     const trackArray = data['tracks']['items'];
     let searchedSongList : Song[] = [];
     trackArray.map(track => {
-      searchedSongList.push({ songURI: track['uri'], songName: track['name'], albumIconLink: track['album']['images'][0]['url'] })
+      searchedSongList.push({ songURI: track['uri'], songName: track['name'], albumIconLink: track['album']['images'][0]['url'], artistName: track['artists'][0]['name'], albumRelease: track['album']['release_date']})
     });
 
     return searchedSongList;

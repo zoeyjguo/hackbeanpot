@@ -12,6 +12,9 @@ const TravelPage = () => {
   return (
     <HomepageContainer>
       <HomepageBox1>
+        <WideBlackBox />
+      </HomepageBox1>
+      <HomepageBox1>
         <FormContainer>
           <h2>Travel</h2>
           <InputGroup>
@@ -35,26 +38,10 @@ const TravelPage = () => {
             </InputGroup>
           </MoodAndActivity>
 
-          <CheckboxGroup>
-            <CheckboxLabel>
-              <input type="checkbox" /> Add a flight
-            </CheckboxLabel>
-            <CheckboxLabel>
-              <input type="checkbox" /> Add a car
-            </CheckboxLabel>
-          </CheckboxGroup>
-
           <SearchButton onClick={handleSearch}>Search</SearchButton>
         </FormContainer>
       </HomepageBox1>
 
-      <PromoSection>
-        <PromoContent>
-          <h1>Save instantly with Expedia Rewards</h1>
-          <p>You can enjoy access to perks like Member Prices, saving you 10% or more on select hotels.</p>
-          <PromoButton>See Member Prices</PromoButton>
-        </PromoContent>
-      </PromoSection>
     </HomepageContainer>
   );
 };
@@ -62,19 +49,36 @@ const TravelPage = () => {
 // Styled components
 const HomepageContainer = styled.div`
   font-family: Arial, Helvetica, sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%; 
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
 `;
 
 const HomepageBox1 = styled.div`
+  width: 160%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: center; 
   border: 1px solid #caccd2;
   border-radius: 10px;
   padding: 20px;
   margin-top: 40px;
 `;
 
+const WideBlackBox = styled.div`
+  width: 80%;
+  max-width: 800px; 
+  height: 150px;
+  background-color: black;
+  border-radius: 10px;
+  margin: 0 auto; 
+`;
+
 const FormContainer = styled.div`
   padding: 20px;
+  width: 100%;
+  max-width: 800px; /* Keep form centered */
 `;
 
 const InputGroup = styled.div`
@@ -114,17 +118,6 @@ const ActivityInput = styled.input`
   flex: 1;
 `;
 
-const CheckboxGroup = styled.div`
-  margin: 20px 0;
-  display: flex;
-  gap: 20px;
-`;
-
-const CheckboxLabel = styled.label`
-  font-size: 15px;
-  color: #454649;
-`;
-
 const SearchButton = styled.button`
   background-color: #3662d8;
   color: white;
@@ -135,32 +128,6 @@ const SearchButton = styled.button`
   font-weight: 500;
   display: block;
   margin: 20px auto 0;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #2f3aa0;
-  }
-`;
-
-const PromoSection = styled.div`
-  background-image: url('img/travel.jpg');
-  border-radius: 10px;
-  margin: 50px 0;
-  padding: 120px 60px;
-  color: white;
-`;
-
-const PromoContent = styled.div`
-  max-width: 30%;
-`;
-
-const PromoButton = styled.button`
-  background-color: #3662d8;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
 

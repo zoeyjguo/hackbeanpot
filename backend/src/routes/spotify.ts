@@ -1,12 +1,12 @@
-const {stringify} = require("querystring");
-const request = require('request'); // Ensure you have 'request' installed or included at the top
+const { stringify } = require("querystring");
+const request = require("request"); // Ensure you have 'request' installed or included at the top
 
+// https://developer.spotify.com/documentation/web-api/tutorials/code-flow
 
 module.exports = function (app) {
-
   const client_id = process.env.VITE_SPOTIFY_CLIENT_ID;
   const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
-  const redirect_uri = 'http://localhost:8080/callback';
+  const redirect_uri = "http://localhost:8080/callback";
 
   let access_token;
   let refresh_token;
@@ -17,20 +17,19 @@ module.exports = function (app) {
   let playlist_href;
   let searched_songs : string[];
 
-
   let user_id;
 
-  async function getProfile(accessToken): Promise<void> {
-    const response = await fetch('https://api.spotify.com/v1/me', {
+  async function getProfile(accessToken) {
+    const response = await fetch("https://api.spotify.com/v1/me", {
       headers: {
-        Authorization: 'Bearer ' + accessToken
-      }
+        Authorization: "Bearer " + accessToken,
+      },
     });
 
     const data = await response.json();
-    console.log(response)
-    console.log("GOT PROFILE")
-    console.log(data.id)
+    console.log(response);
+    console.log("GOT PROFILE");
+    console.log(data.id);
 
     user_id = data.id;
     display_name = data.display_name;
@@ -39,30 +38,33 @@ module.exports = function (app) {
   }
 
   async function createPlaylist(accessToken): Promise<number> {
-    const response = await fetch('https://api.spotify.com/v1/users/' + user_id + '/playlists', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + accessToken,
-        'Content-Type': 'application/json'  // Required for JSON data
-      },
-      body: JSON.stringify({
-        name: "HACKBEANPOT PLAYLIST",
-        description: "asdfghgfdafsvfdv",
-        public: false  // Private playlist
-      })
-    });
+    const response = await fetch(
+      "https://api.spotify.com/v1/users/" + user_id + "/playlists",
+      {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "Content-Type": "application/json", // Required for JSON data
+        },
+        body: JSON.stringify({
+          name: "HACKBEANPOT PLAYLIST",
+          description: "asdfghgfdafsvfdv",
+          public: false, // Private playlist
+        }),
+      }
+    );
 
     if (response.status != 201) {
-      console.log(response.status)
+      console.log(response.status);
       return -1;
     }
 
-    console.log("Creating playlist")
+    console.log("Creating playlist");
     const data = await response.json();
     playlist_href = data.external_urls.spotify;
     playlist_id = data.id;
-    console.log("playlistID!!!!")
-    console.log(playlist_id)
+    console.log("playlistID!!!!");
+    console.log(playlist_id);
 
     return 0;
   }
@@ -142,31 +144,45 @@ module.exports = function (app) {
       })
   });
 
-  app.get('/username', function (req, res) {
+  app.get("/username", function (req, res) {
     if (display_name) {
-      res.status(200).send({username: display_name})
+      res.status(200).send({ username: display_name });
     } else {
       res.status(404);
     }
   });
 
-
   app.get('/login', function (req, res) {
-    const scope = 'user-read-private user-read-email playlist-modify-private';
+      const scope = 'user-read-private user-read-email playlist-modify-private';
 
-    const url = 'https://accounts.spotify.com/authorize?' +
+    const url =
+      "https://accounts.spotify.com/authorize?" +
       stringify({
-        response_type: 'code',
+        response_type: "code",
         client_id: client_id,
         scope: scope,
-        redirect_uri: redirect_uri
+        redirect_uri: redirect_uri,
+        show_dialog: true,
       });
 
-    res.json({url});  // Send back the URL instead of redirecting
+    res.json({ url });
   });
 
-  app.get('/callback', function (req, res) {
-    console.log("callback!")
+  app.get("/logout", function (req, res) {
+    access_token = null;
+    refresh_token = null;
+    scope = null;
+    expires_in = null;
+    display_name = null;
+    playlist_id = null;
+    playlist_href = null;
+    user_id = null;
+
+    res.json({ url: "http://localhost:5173" });
+  });
+
+  app.get("/callback", function (req, res) {
+    console.log("callback!");
 
     const code = req.query.code || null;
     // const state = req.query.state || null;
@@ -188,17 +204,19 @@ module.exports = function (app) {
     // }
 
     const authOptions = {
-      url: 'https://accounts.spotify.com/api/token',
+      url: "https://accounts.spotify.com/api/token",
       form: {
         code: code,
         redirect_uri: redirect_uri,
-        grant_type: 'authorization_code'
+        grant_type: "authorization_code",
       },
       headers: {
-        'content-type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Basic ' + (Buffer.from(client_id + ':' + client_secret).toString('base64'))
+        "content-type": "application/x-www-form-urlencoded",
+        Authorization:
+          "Basic " +
+          Buffer.from(client_id + ":" + client_secret).toString("base64"),
       },
-      json: true
+      json: true,
     };
 
     // Send the POST request
@@ -210,11 +228,11 @@ module.exports = function (app) {
         scope = body.scope;
         expires_in = body.expires_in;
 
-        console.log("TOKENS!")
+        console.log("TOKENS!");
         console.log(access_token);
-        console.log(refresh_token)
-        console.log(scope)
-        console.log(expires_in)
+        console.log(refresh_token);
+        console.log(scope);
+        console.log(expires_in);
 
         // we have access_token now!
         getProfile(access_token);
@@ -229,8 +247,9 @@ module.exports = function (app) {
 
     console.log(res);
 
-    res.redirect('http://localhost:5173');  // Redirect to React app
+    res.redirect("http://localhost:5173/locations"); // Redirect to React app
   });
+};
 
 
-}
+// }

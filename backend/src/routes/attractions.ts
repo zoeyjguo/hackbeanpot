@@ -23,9 +23,11 @@ module.exports = function (app) {
   })
 
   app.get('/getGeneratedSongs', function (req, res) {
-    console.log("sending generated songs!", spotifySongs);
+    let tempSpotifySongs = spotifySongs;
+    spotifySongs = [];
+    console.log("sending generated songs!", tempSpotifySongs);
     res.status(200).json({
-      spotifySongsList: spotifySongs
+      spotifySongsList: tempSpotifySongs
     });
   })
 

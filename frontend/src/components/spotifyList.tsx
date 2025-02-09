@@ -83,6 +83,7 @@ const Playlist = () => {
         })
           .then(response => {
               if (response.ok) {
+                  setSongs([]);
                   console.log("Successfully added song(s)");
               } else {
                   console.log("ERROR: unable to add song(s)");

@@ -91,9 +91,9 @@ module.exports = function (app) {
     });
   }
 
-  async function searchSong(accessToken, genre: string, numSongs: number) : Promise<Song[]> {
+  async function searchSong(accessToken, wildcard: string, genre: string, numSongs: number) : Promise<Song[]> {
     // make request to spotify server
-    const response = await fetch('https://api.spotify.com/v1/search?q=genre%3D' + genre + '&type=track&market=US&limit=' + numSongs + '&offset=0', {
+    const response = await fetch('https://api.spotify.com/v1/search?q=' + encodeURI(wildcard) + '&genre%3D' + encodeURI(genre) + '&type=track&market=US&limit=' + numSongs + '&offset=0', {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + accessToken,

@@ -38,8 +38,12 @@ module.exports = function (app) {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const generateSong = async (attraction: string) => {
-            const prompt = `Find an existing song for this attraction: ${attraction} based off of the location, vibes, and language of the attraction. 
-            output 1 song in the format of: artist name - song title. No matter what, find a single song and only output the song title and artist name.`;
+            // const prompt = `Find an existing song for this attraction: ${attraction} that matches its location, vibes, and music genre of where the attraction is located. 
+            // output 1 song in the format of: artist name - song title. No matter what, find a single song and only output the song title and artist name. You don't have to find a perfect match, just output a single song.
+            // If a song can't be found because you don't know the location, just assume it's in the US and just output a song that matches the vibes of the attraction name.`;
+            const prompt = `Pick a genre of music for this attraction: ${attraction} that matches its location, vibes, and is in the language of where the attraction is located. 
+            Then, pick a random song from this genre. No matter what, find a single song and only output the song title and artist name; do not give me your reasoning no matter what. You don't have to find a perfect match, just output a single song.
+            If a song can't be found because you don't know the location, just assume it's in the US and just output a song that matches the vibes of the attraction name.`;
             const result = await model.generateContent(prompt);
             return result.response.text(); // Extract text response from Gemini
         };

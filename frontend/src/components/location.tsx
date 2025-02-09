@@ -69,7 +69,7 @@ const Location = () => {
         const fetchAttractions = async () => {
             while (attractions.length < totalAttractions && tries < maxTries) {
                 tries++;
-                let j = Math.floor(Math.random() * routePath.length);
+                const j = Math.floor(Math.random() * routePath.length);
                 const location = { lat: routePath[j].lat(), lng: routePath[j].lng() };
                 const attraction = await fetchAttraction(location);
                 if (attraction) {
@@ -247,7 +247,8 @@ const Location = () => {
                         }}
                     >
                         {attractions.map((attraction, index) => (
-                            <Attraction key={index} place={attraction} onRemove={() => {}} />
+                            <Attraction key={index} place={attraction} onRemove={() => 
+                                {setAttractions(attractions.filter((_, i) => i !== index))}} />
                         ))}
                     </Box>
                 </Box>

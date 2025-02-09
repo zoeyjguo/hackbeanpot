@@ -16,9 +16,9 @@ export default function Attraction({ place, onRemove }: AttractionProps) {
     const photoUrl = photo ? photo.getUrl({ maxWidth: 400 }) : null;
 
   return (
-    <Card sx={{ width: 345, minHeight: 250, display: "flex", flexDirection: "column" }}>
+    <Card sx={{ width: 345, minHeight: 250, display: "flex", flexDirection: "column", borderRadius: 5, border: '2px solid #75ba81'}}>
       {photoUrl ? (
-        <CardMedia component="img" alt={place.name} height="140" image={photoUrl} />
+        <CardMedia component="img" alt={place.name} height="140" image={photoUrl}/>
       ) : (
         <Box 
           sx={{ 
@@ -26,7 +26,7 @@ export default function Attraction({ place, onRemove }: AttractionProps) {
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center', 
-            backgroundColor: '#e0e0e0' 
+            backgroundColor: '#e0e0e0',
           }}
         >
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
@@ -35,7 +35,7 @@ export default function Attraction({ place, onRemove }: AttractionProps) {
         </Box>
       )}
       <CardContent>
-        <Typography variant="h5" component="div">
+        <Typography variant="h5" component="div" fontFamily={"Inter, system-ui, Avenir, Helvetica, Arial, sans-serif"}>
           {place.name}
         </Typography>
       </CardContent>

@@ -1,22 +1,22 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import '../App.css'
 import Box from '@mui/material/Box';
 import logo from '../assets/Primary_Logo_Green_RGB.svg'
 import Navbar from './navbar';
 
 function Home() {
-    const [playlistName, setPlaylistName] = useState("");
-    const [numSongs, setNumSongs] = useState(1);
+    // const [playlistName, setPlaylistName] = useState("");
+    // const [numSongs, setNumSongs] = useState(1);
     
-    const createPlaylist = () => {
-      console.log("Creating playlist");
-      console.log(playlistName);
-      console.log(numSongs);
-    }
+    // const createPlaylist = () => {
+    //   console.log("Creating playlist");
+    //   console.log(playlistName);
+    //   console.log(numSongs);
+    // }
 
-    const checkValidity = () => {
-      return numSongs > 3 || numSongs < 1 || playlistName.trim() === "";
-    }
+    // const checkValidity = () => {
+    //   return numSongs > 3 || numSongs < 1 || playlistName.trim() === "";
+    // }
 
     return (
         <Box sx={{ minHeight: "100vh", padding: 3 }}>

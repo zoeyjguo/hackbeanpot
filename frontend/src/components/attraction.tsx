@@ -40,7 +40,10 @@ export default function Attraction({ place, onRemove }: AttractionProps) {
         </Typography>
       </CardContent>
       <CardActions sx={{ justifyContent: 'right' }}>
-        <Button size="small" onClick={onRemove}>
+        <Button 
+        size="small" 
+        onClick={onRemove} 
+        sx={{ "&:focus": { outline: "none"} }}>
           Remove
         </Button>
       </CardActions>

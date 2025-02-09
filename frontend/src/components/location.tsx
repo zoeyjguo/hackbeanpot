@@ -14,6 +14,7 @@ const Location = () => {
     const [attractions, setAttractions] = useState<google.maps.places.PlaceResult[]>([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [loadingPlaylist, setLoadingPlaylist] = useState(false);
 
     const getRoute = () => {
         setLoading(true);
@@ -200,7 +201,7 @@ const Location = () => {
                         },
                     }}
                 >
-                    {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Generate Attractions"} {/* Show spinner when loading */}
+                    {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Generate Attractions"}
                 </Button>
             </Box>
             <Snackbar
@@ -256,6 +257,33 @@ const Location = () => {
                                 {setAttractions(attractions.filter((_, i) => i !== index))}} />
                         ))}
                     </Box>
+                    <Button
+                        disabled={loadingPlaylist}
+                        onClick={() => {
+                            setLoadingPlaylist(true);
+                            setTimeout(() => {
+                                window.location.href = "/playlist";
+                            }, 5000);
+                        }}
+                        sx={{
+                            marginTop: 3,
+                            padding: "10px 20px",
+                            color: "white",
+                            fontWeight: "bold",
+                            backgroundColor: startingLocation === "" || endingLocation === "" ? "#e0e0e0" : "#388e3c",
+                            "&:hover": {
+                                backgroundColor: startingLocation === "" || endingLocation === "" ? "#e0e0e0" : "#2c6a2f",
+                            },
+                            "&:disabled": {
+                                backgroundColor: "#e0e0e0",
+                            },
+                            "&:focus": {
+                                outline: "none",
+                            },
+                        }}
+                    >
+                        {loadingPlaylist ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Generate Playlist"}
+                    </Button>
                 </Box>
             )}
         </Box>

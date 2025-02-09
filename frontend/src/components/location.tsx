@@ -32,7 +32,7 @@ const Location = () => {
                 <Typography variant="h5">
                     Enter Locations
                 </Typography>
-                <span style={{ color: "white" }}>Starting Location</span>
+                <Typography >Starting Location</Typography>
                 <Autocomplete
                     apiKey={import.meta.env.VITE_GOOGLE_MAP_API_KEY}
                     onPlaceSelected={handleStartingLocationChange}
@@ -41,7 +41,7 @@ const Location = () => {
                         <TextField {...params} label="Starting location" variant="outlined" />
                     )}
                 />
-                <span style={{ color: "white" }}>Ending Location</span>
+                <Typography >Ending Location</Typography>
                 <Autocomplete
                     apiKey={import.meta.env.VITE_GOOGLE_MAP_API_KEY}
                     onPlaceSelected={handleEndingLocationChange}

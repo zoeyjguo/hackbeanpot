@@ -115,10 +115,11 @@ module.exports = function (app) {
 
   app.post('/searchSongs', async function (req, res) {
     const data = req.body;
+    const wildcard: string = data['wildcard']
     const genre: string = data['genre'];
     const numSongs: number = data['numSongs']
 
-    let returnedSearchedSongList : Song[] = await searchSong(access_token, genre, numSongs);
+    let returnedSearchedSongList : Song[] = await searchSong(access_token, wildcard, genre, numSongs);
     res.status(200).send(returnedSearchedSongList);
   })
 

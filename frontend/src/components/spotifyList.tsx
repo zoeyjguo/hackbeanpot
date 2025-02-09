@@ -72,6 +72,7 @@ const Playlist = () => {
         await createPlaylist();
         console.log("Songs are now:", songs);
         addSongs(songs);
+        window.location.href = "http://localhost:5173/locations";
     }
 
     const addSongs = (songsToAdd : Song[]) => {

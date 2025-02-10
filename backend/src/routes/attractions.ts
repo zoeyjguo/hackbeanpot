@@ -1,7 +1,7 @@
 import {Attraction} from "../types/attractionType";
 import {Request, Response} from "express";
 import {Song} from "../types/spotifyTypes";
-const GOOGLE_API_KEY= 'AIzaSyAXgkpWUfbn4JvXolEKxO4cDkuBJjHXHTg'
+const GOOGLE_API_KEY= process.env.GOOGLE_API_KEY;
 
 module.exports = function (app) {
   // variables

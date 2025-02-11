@@ -3,7 +3,7 @@ import { Song } from "../types/spotifyTypes";
 const { stringify } = require("querystring");
 const request = require("request"); // Ensure you have 'request' installed or included at the top
 
-// https://developer.spotify.com/documentation/web-api/tutorials/code-flow
+// https://developer.spotify.com/documentation/web-api/tutorials/code-flow a
 
 module.exports = function (app) {
   const client_id = process.env.VITE_SPOTIFY_CLIENT_ID;
